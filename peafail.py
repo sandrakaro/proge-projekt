@@ -6,6 +6,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+<<<<<<< HEAD
 lauaViinURL = 'https://www.selver.ee/laua-viin-liviko-50-cl'
 # HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
 try:
@@ -22,3 +23,12 @@ try:
         print('Päring ebaõnnestus')
 except requests.exceptions.RequestException as viga:
     print(f'Päringu viga {viga}')
+=======
+from deepface import DeepFace
+
+def main():
+    placeholder = 1
+
+if __name__ == '__main__':
+    main()
+>>>>>>> 3662eac2f16e91f9b0109b81509ae51a746a876c
