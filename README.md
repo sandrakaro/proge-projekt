@@ -4,7 +4,8 @@ https://www.notion.so/Proge-projekti-alfaversiooni-t-htaeg-299f7fe65d1a80e8a84fd
 Youtube'i tutorial  
 https://youtu.be/fkgpvkqcoJc?si=eMSQr923vIls_GVN 
 
-Kange alkohol:
+Joogid:
+
 viin:
 https://www.selver.ee/laua-viin-liviko-50-cl
 https://www.selver.ee/viin-absolut-50-cl
@@ -21,3 +22,9 @@ https://www.selver.ee/dzinn-saaremaa-rabarber-50-cl
 
 jääger:
 https://www.selver.ee/likoor-jagermeister-50-cl
+
+pealekas:
+https://www.selver.ee/johvikajook-aura-1-l
+https://www.selver.ee/apelsinimahl-100-aura-1-l
+https://www.selver.ee/multimahlajook-poltsamaa-1-l
+https://www.selver.ee/limonaad-traditsiooniline-limonaad-1-l
