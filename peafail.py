@@ -7,6 +7,7 @@
 # Kui requestida kõiki URL-e korraga, siis Selver ei lase päringuid läbi
 # Ja nende selver.ee/robots.txt ütleb disallow price= seegaaa, ma ei tea millal nad mu IP ära võivad bännida
 # Pm võib nt Prismaga ka proovida, aga võivad samad probleemid olla
+# Aga Prisma robots.txt lubab see-eest kõike kraapida
 # Also see ühe URL-i requestimine võtab väga kaua aega, wait 10 s soovitas Gemini
 # seega ma ei tea kas asi töötab, kui seda lühemaks panna
 # Peaks välja mõtlema, mis see lõpplahendus olla võiks
