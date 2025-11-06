@@ -8,7 +8,7 @@
 # Ja nende selver.ee/robots.txt ütles disallow price=
 # Seega panin kõik lingid Prisma omadeks rn
 # Prisma robots.txt lubab kõike kraapida
-# Aga kõikide linkide korraga requestimist veel ei testinud
+# Aga kõikide linkide korraga requestimist ikka ei luba
 # Also see ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
 # seega ma ei tea kas asi töötab, kui seda lühemaks panna
 # Peaks välja mõtlema, mis see lõpplahendus olla võiks
