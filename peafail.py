@@ -4,11 +4,12 @@
 # vms siin olema peab
 
 # Praegu on programm selline, et kasutaja sisestab joogi nime ja saab ainult selle joogi hinna
-# Kui requestida kõiki URL-e korraga, siis Selver ei lase päringuid läbi
-# Ja nende selver.ee/robots.txt ütleb disallow price= seegaaa, ma ei tea millal nad mu IP ära võivad bännida
-# Pm võib nt Prismaga ka proovida, aga võivad samad probleemid olla
-# Aga Prisma robots.txt lubab see-eest kõike kraapida
-# Also see ühe URL-i requestimine võtab väga kaua aega, wait 10 s soovitas Gemini
+# Kui requestida kõiki URL-e korraga, siis Selver ei lasnud päringuid läbi
+# Ja nende selver.ee/robots.txt ütles disallow price=
+# Seega panin kõik lingid Prisma omadeks rn
+# Prisma robots.txt lubab kõike kraapida
+# Aga kõikide linkide korraga requestimist veel ei testinud
+# Also see ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
 # seega ma ei tea kas asi töötab, kui seda lühemaks panna
 # Peaks välja mõtlema, mis see lõpplahendus olla võiks
 
@@ -34,10 +35,10 @@ joogiSooviLink = joogiSõnastik[joogiSoov]
 
 try:
     driver.get(joogiSooviLink) # avab soovitud joogi lingi
-    wait = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'ProductPrice'))) # ootab kuni JavaScripti hind on lehel laetud
+    wait = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span[data-test-id='display-price']"))) # ootab kuni JavaScripti hind on lehel laetud
     päringuSisu = driver.page_source
     soup = BeautifulSoup(päringuSisu, 'html.parser')
-    hinnaElement = soup.find('div', class_='ProductPrice')
+    hinnaElement = soup.find('span', attrs={'data-test-id': 'display-price'})
     if hinnaElement:
         hind = hinnaElement.text.strip().split('€')[0] # ei anna liitrihinda ega euromärki
         hind = float(hind.replace(',','.')) # teeme komaga hinna ujukomaarvuks

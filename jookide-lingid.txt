@@ -1,18 +1,18 @@
 ---viin
-Laua Viin;https://www.selver.ee/laua-viin-liviko-50-cl
-Absolut;https://www.selver.ee/viin-absolut-50-cl
-Viru Valge;https://www.selver.ee/viin-viru-valge-50-cl-t000007274
+Laua Viin;https://www.prismamarket.ee/toode/laua-viin-40vol-500ml/4740050002123
+Absolut;https://www.prismamarket.ee/toode/absolut-vodka-40vol-500ml/7312040017072
+Viru Valge;https://www.prismamarket.ee/toode/viru-valge-viin-40vol-500ml/4740050002291
 ---rumm
-Bacardi;https://www.selver.ee/rumm-bacardi-carta-blanca-50-cl
-Captain Morgan;https://www.selver.ee/piiritusjook-captain-morgan-spiced-gold-50-cl
+Bacardi;https://www.prismamarket.ee/toode/bacardi-carta-blanca-rumm-37-5vol-500ml/5010677013918
+Captain Morgan;https://www.prismamarket.ee/toode/captain-morgan-spiced-gold-piiritusjook-35vol-500ml/5000281025360
 ---džinn
-Kingsmill;https://www.selver.ee/dzinn-kingsmill-50-cl
-Beefeater;https://www.selver.ee/dzinn-beefeater-50-cl
-Saaremaa rabarber;https://www.selver.ee/dzinn-saaremaa-rabarber-50-cl
+Kingsmill;pole 500 ml!
+Beefeater;https://www.prismamarket.ee/toode/beefeater-london-dry-gin-40vol-500ml/5000329002131
+Saaremaa rabarber;https://www.prismamarket.ee/toode/saaremaa-gin-rabarber-37-5vol-500ml/4740054361974
 ---jääger
-Jagermeister;https://www.selver.ee/likoor-jagermeister-50-cl
+Jägermeister;https://www.prismamarket.ee/toode/jagermeister-likoor-35vol-500ml/4067700013057
 ---pealekas
-jõhvikamahl;https://www.selver.ee/johvikajook-aura-1-l
-apelsinimahl;https://www.selver.ee/apelsinimahl-100-aura-1-l
-multimahl;https://www.selver.ee/multimahlajook-poltsamaa-1-l
-Limpa;https://www.selver.ee/limonaad-traditsiooniline-limonaad-1-l
+jõhvikamahl;https://www.prismamarket.ee/toode/aura-johvikajook-1l/4740051004379
+apelsinimahl;https://www.prismamarket.ee/toode/aura-apelsinimahl-1l/4740051004270
+multimahl;https://www.prismamarket.ee/toode/poltsamaa-multimahlajook-1l/4740029050070
+Limpa;https://www.prismamarket.ee/toode/limonaad-a-le-coq-traditsiooniline-limonaad-1-l/4740051001958
