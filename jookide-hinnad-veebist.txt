@@ -1,0 +1,12 @@
+Laua Viin;6.95
+Absolut;9.98
+Viru Valge;8.98
+Bacardi;12.98
+Captain Morgan;10.98
+Beefeater;16.98
+Saaremaa rabarber;11.85
+Jägermeister;13.98
+jõhvikamahl;1.39
+apelsinimahl;3.1
+multimahl;1.88
+Limpa;0.99
