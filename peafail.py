@@ -4,7 +4,8 @@
 # vms siin olema peab
 
 # Prisma robots.txt lubab kõike kraapida
-# Also see ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
+# Mitme URL-i requestimine korras
+# Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
 
 
 from bs4 import BeautifulSoup
