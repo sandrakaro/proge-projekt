@@ -79,15 +79,15 @@ sobivused ={
 "Viru Valge":  ["jõhvikamahl", "apelsinimahl", "multimahl"],
 
 #Rumm ja pealekas
-"bacardi": ["coca-cola", "apelsinimahl","Limpa"],
-"Captain Morgan": ["coca-cola","apelsinimahl","Limpa"],
+"Bacardi": ["Coca-Cola", "apelsinimahl","Limpa"],
+"Captain Morgan": ["Coca-Cola","apelsinimahl","Limpa"],
 
 #Džinn ja pealekas
-"Beefeater": ["tonic","apelsinimahl","Limpa"],
-"Saaremaa rabarber": ["tonic","apelsinimahl","Limpa"],
+"Beefeater": ["toonik","apelsinimahl","Limpa"],
+"Saaremaa rabarber": ["toonik","apelsinimahl","Limpa"],
 
 #Jääger ja coca
-"Jägermeister": ["coca-cola"]}
+"Jägermeister": ["Coca-Cola"]}
 
 #Tsükkel väljastab kõik joogid, mis sobivad eelarvesse
 while True:
@@ -95,7 +95,7 @@ while True:
         eelarve = float(input('Mis on Sinu eelarve (€):'))
         break
     except ValueError:
-        print('Sisesta palun arvuline väärtus')
+        print('Sisesta palun arvuline väärtus.')
 
 print(f'\nJoogid, mis sobituvad {eelarve} € sisse:\n')
 
@@ -110,7 +110,7 @@ if not sobiv_jook:
     print('Sellise hinnaga jooke ei leitud :(')
 
 #Tsükkel, mis väljastab jookide kombinatsioonid, mis sobivad eelarvesse
-print(f'\nSobivad joogikombinatsioonid, mis mahuvad {eelarve:.2f} € sisse:\n')
+print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve:.2f} € sisse:\n')
 
 sobiv_kombo = False
 
@@ -129,3 +129,4 @@ for alko_nimi, sobivad_pealekad in sobivused.items():
 
 if not sobiv_kombo:
     print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud:(')
+
