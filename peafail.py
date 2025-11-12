@@ -89,44 +89,40 @@ sobivused = {
 "Jägermeister": ["Coca-Cola"]
 }
 
-#Tsükkel väljastab kõik joogid, mis sobivad eelarvesse
+#Tsükkel väljastab kõik shottideks sobivad joogid, mis mahuvad eelarvesse
 while True:
     try:
-        eelarve = float(input('Mis on Sinu eelarve (€):'))
+        eelarve = float(input('Mis on Sinu eelarve (€)? '))
         break
     except ValueError:
         print('Sisesta palun arvuline väärtus.')
 
-print(f'\nJoogid, mis sobituvad {eelarve} € sisse:\n')
+print(f'\nShotid, mis sobituvad {eelarve} € sisse:\n')
 
 sobiv_jook = False
 
-for nimi, hind in hinnaSõnastik.items():
+for nimi, hind in alkoSõnastik.items():
     if hind <= eelarve:
-        print(f'{nimi} - {hind:.2f} €')
+        print(f'{nimi} - {hind} €')
         sobiv_jook = True
 
 if not sobiv_jook:
-    print('Sellise hinnaga jooke ei leitud :(')
+    print('Sellise hinnaga shotte ei leitud :(')
 
 #Tsükkel, mis väljastab jookide kombinatsioonid, mis sobivad eelarvesse
-print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve:.2f} € sisse:\n')
+print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve} € sisse:\n')
 
 sobiv_kombo = False
 
 for alko_nimi, sobivad_pealekad in sobivused.items():
-   if alko_nimi in alkoSõnastik:
-            alko_hind = alkoSõnastik[alko_nimi]
-            
-            for pealeka_nimi in sobivad_pealekad:
-                if pealeka_nimi in pealekaSõnastik:
-                    pealeka_hind = pealekaSõnastik[pealeka_nimi]
-                    kogu_hind = alko_hind + pealeka_hind
-
-            if kogu_hind <= eelarve:
-                print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind:.2f}€')
-                sobiv_kombo = True
+        alko_hind = alkoSõnastik[alko_nimi]   
+        for pealeka_nimi in sobivad_pealekad:
+                pealeka_hind = pealekaSõnastik[pealeka_nimi]
+                kogu_hind = alko_hind + pealeka_hind
+        if kogu_hind <= eelarve:
+            print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind}€')
+            sobiv_kombo = True
 
 if not sobiv_kombo:
-    print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud:(')
+    print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud :(')
 
