@@ -67,6 +67,9 @@ elif kasKontroll == 'n': # Kasutame seda koodi testimisel, et mitte serverist b�
     hinnaFail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
     hinnaSõnastik = {nimi:float(hind) for nimi,hind in (rida.strip().split(';') for rida in hinnaFail)}
     hinnaFail.close()
+else:
+    print('Sisestasid ebasobiva väärtuse, programm lõpetab töö.')
+    exit()
 
 alkoSõnastik = {nimi:hind for nimi, hind in hinnaSõnastik.items() if nimi in alkoNimed}
 pealekaSõnastik = {nimi:hind for nimi,hind in hinnaSõnastik.items() if nimi in pealekaNimed}
@@ -115,13 +118,13 @@ print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve} € sisse:\n')
 sobiv_kombo = False
 
 for alko_nimi, sobivad_pealekad in sobivused.items():
-        alko_hind = alkoSõnastik[alko_nimi]   
-        for pealeka_nimi in sobivad_pealekad:
-                pealeka_hind = pealekaSõnastik[pealeka_nimi]
-                kogu_hind = alko_hind + pealeka_hind
-        if kogu_hind <= eelarve:
-            print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind}€')
-            sobiv_kombo = True
+    alko_hind = alkoSõnastik[alko_nimi]   
+    for pealeka_nimi in sobivad_pealekad:
+            pealeka_hind = pealekaSõnastik[pealeka_nimi]
+            kogu_hind = alko_hind + pealeka_hind
+    if kogu_hind <= eelarve:
+        print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind}€')
+        sobiv_kombo = True
 
 if not sobiv_kombo:
     print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud :(')
