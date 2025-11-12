@@ -66,8 +66,66 @@ if kasKontroll == 'y':
 elif kasKontroll == 'n': # Kasutame seda koodi testimisel, et mitte serverist bänni saada
     print('Selge! Võtan hinnad olemasolevast failist.\n')
     hinnaFail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
-    hinnaSõnastik = {nimi:hind for nimi,hind in (rida.strip().split(';') for rida in hinnaFail)}
+    hinnaSõnastik = {nimi:float(hind) for nimi,hind in (rida.strip().split(';') for rida in hinnaFail)}
     hinnaFail.close()
 
 alkoSõnastik = {nimi:hind for nimi, hind in hinnaSõnastik.items() if nimi in alkoNimed}
 pealekaSõnastik = {nimi:hind for nimi,hind in hinnaSõnastik.items() if nimi in pealekaNimed}
+
+sobivused ={
+# Viinad ja pealekas
+"Laua Viin":  ["jõhvikamahl", "apelsinimahl", "multimahl"],
+"Absolut": ["jõhvikamahl", "apelsinimahl", "multimahl"],
+"Viru Valge":  ["jõhvikamahl", "apelsinimahl", "multimahl"],
+
+#Rumm ja pealekas
+"bacardi": ["coca-cola", "apelsinimahl","Limpa"],
+"Captain Morgan": ["coca-cola","apelsinimahl","Limpa"],
+
+#Džinn ja pealekas
+"Beefeater": ["tonic","apelsinimahl","Limpa"],
+"Saaremaa rabarber": ["tonic","apelsinimahl","Limpa"],
+
+#Jääger ja coca
+"Jägermeister": ["coca-cola"]}
+
+#Tsükkel väljastab kõik joogid, mis sobivad eelarvesse
+while True:
+    try:
+        eelarve = float(input('Mis on Sinu eelarve (€):'))
+        break
+    except ValueError:
+        print('Sisesta palun arvuline väärtus')
+
+print(f'\nJoogid, mis sobituvad {eelarve} € sisse:\n')
+
+sobiv_jook = False
+
+for nimi, hind in hinnaSõnastik.items():
+    if hind <= eelarve:
+        print(f'{nimi} - {hind:.2f} €')
+        sobiv_jook = True
+
+if not sobiv_jook:
+    print('Sellise hinnaga jooke ei leitud :(')
+
+#Tsükkel, mis väljastab jookide kombinatsioonid, mis sobivad eelarvesse
+print(f'\nSobivad joogikombinatsioonid, mis mahuvad {eelarve:.2f} € sisse:\n')
+
+sobiv_kombo = False
+
+for alko_nimi, sobivad_pealekad in sobivused.items():
+   if alko_nimi in alkoSõnastik:
+            alko_hind = alkoSõnastik[alko_nimi]
+            
+            for pealeka_nimi in sobivad_pealekad:
+                if pealeka_nimi in pealekaSõnastik:
+                    pealeka_hind = pealekaSõnastik[pealeka_nimi]
+                    kogu_hind = alko_hind + pealeka_hind
+
+            if kogu_hind <= eelarve:
+                print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind:.2f}€')
+                sobiv_kombo = True
+
+if not sobiv_kombo:
+    print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud:(')
