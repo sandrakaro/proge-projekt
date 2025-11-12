@@ -2,9 +2,6 @@
 # ---Autorid: Greteliis Kokk, Sandra Karo
 # ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt
 # ---Muu oluline info: 
-# ---Edasised plaanid: lisada GUI Tkinteriga, selleks ka kraapida koos tootega tema pilt, lisada kasutajalt küsimine, kas teeb
-# shotte, kokteili või mõlemat, lisada selleks vajalikud funktsionaalsused, nt shotisõnastik,
-# korrastada koodi, optimiseerida, teha loetavamaks, lisada kommentaare, täita vormistusnõuded
 
 # Prisma robots.txt lubab kõike kraapida
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
