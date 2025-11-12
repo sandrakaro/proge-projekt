@@ -72,22 +72,23 @@ elif kasKontroll == 'n': # Kasutame seda koodi testimisel, et mitte serverist b�
 alkoSõnastik = {nimi:hind for nimi, hind in hinnaSõnastik.items() if nimi in alkoNimed}
 pealekaSõnastik = {nimi:hind for nimi,hind in hinnaSõnastik.items() if nimi in pealekaNimed}
 
-sobivused ={
+sobivused = {
 # Viinad ja pealekas
 "Laua Viin":  ["jõhvikamahl", "apelsinimahl", "multimahl"],
 "Absolut": ["jõhvikamahl", "apelsinimahl", "multimahl"],
 "Viru Valge":  ["jõhvikamahl", "apelsinimahl", "multimahl"],
 
 #Rumm ja pealekas
-"bacardi": ["coca-cola", "apelsinimahl","Limpa"],
-"Captain Morgan": ["coca-cola","apelsinimahl","Limpa"],
+"Bacardi": ["Coca-Cola", "apelsinimahl","Limpa"],
+"Captain Morgan": ["Coca-Cola","apelsinimahl","Limpa"],
 
 #Džinn ja pealekas
-"Beefeater": ["tonic","apelsinimahl","Limpa"],
-"Saaremaa rabarber": ["tonic","apelsinimahl","Limpa"],
+"Beefeater": ["toonik","apelsinimahl","Limpa"],
+"Saaremaa rabarber": ["toonik","apelsinimahl","Limpa"],
 
 #Jääger ja coca
-"Jägermeister": ["coca-cola"]}
+"Jägermeister": ["Coca-Cola"]
+}
 
 #Tsükkel väljastab kõik joogid, mis sobivad eelarvesse
 while True:
