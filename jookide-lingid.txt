@@ -15,5 +15,5 @@ jõhvikamahl;https://www.prismamarket.ee/toode/aura-johvikajook-1l/4740051004379
 apelsinimahl;https://www.prismamarket.ee/toode/aura-apelsinimahl-1l/4740051004270
 multimahl;https://www.prismamarket.ee/toode/poltsamaa-multimahlajook-1l/4740029050070
 Limpa;https://www.prismamarket.ee/toode/limonaad-a-le-coq-traditsiooniline-limonaad-1-l/4740051001958
-coca-cola;https://www.prismamarket.ee/toode/coca-cola-karastusjook-2l/4743050000045
-tonic;https://www.prismamarket.ee/toode/orn-craft-rose-lemonade-toonik-1l/4740098092025
+Coca-Cola;https://www.prismamarket.ee/toode/coca-cola-karastusjook-2l/4743050000045
+toonik;https://www.prismamarket.ee/toode/orn-craft-rose-lemonade-toonik-1l/4740098092025
