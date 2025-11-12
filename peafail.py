@@ -1,10 +1,12 @@
-# Siin on meie peamine fail
-# Siin on kirjeldus
-# Siin on autorid
-# vms siin olema peab
+# ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide või shottide kohta, mida saab selle raha eest teha
+# ---Autorid: Greteliis Kokk, Sandra Karo
+# ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt
+# ---Muu oluline info: 
+# ---Edasised plaanid: lisada GUI Tkinteriga, selleks ka kraapida koos tootega tema pilt, lisada kasutajalt küsimine, kas teeb
+# shotte, kokteili või mõlemat, lisada selleks vajalikud funktsionaalsused, nt shotisõnastik,
+# korrastada koodi, optimiseerida, teha loetavamaks, lisada kommentaare
 
 # Prisma robots.txt lubab kõike kraapida
-# Mitme URL-i requestimine korras
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
 
 
@@ -87,12 +89,8 @@ sobivused = {
 "Saaremaa rabarber": ["toonik","apelsinimahl","Limpa"],
 
 #Jääger ja coca
-<<<<<<< HEAD
-"Jägermeister": ["Coca-Cola"]}
-=======
 "Jägermeister": ["Coca-Cola"]
 }
->>>>>>> 5c0971b1a0326e86f7d40439df314fa041111712
 
 #Tsükkel väljastab kõik joogid, mis sobivad eelarvesse
 while True:
