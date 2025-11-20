@@ -1,7 +1,9 @@
-# ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide või shottide kohta, mida saab selle raha eest teha
+# ---Projekti pealkiri: kokteiliraamat??????????????
+# ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide või shottide kohta,
+# mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
 # ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt
-# ---Muu oluline info: 
+# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4 ning selenium (pip3 install teeginimi)
 
 # Prisma robots.txt lubab kõike kraapida
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
