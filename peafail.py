@@ -3,7 +3,7 @@
 # mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
 # ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt
-# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4 ning selenium (pip3 install teeginimi)
+# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium ning PySimpleGUI (pip3 install teeginimi)
 
 # Prisma robots.txt lubab kõike kraapida
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
@@ -15,6 +15,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
+import PySimpleGUI as sg
 
 joogiFail = open('jookide-lingid.txt',encoding='utf-8')
 joogiJärjend = [el.strip().split(';') for el in joogiFail.readlines()]
@@ -119,6 +120,10 @@ print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve} € sisse:\n')
 
 sobiv_kombo = False
 
+# -------- !!!!!!!!!!!! siin (tglt varem) alustada kasutaja
+# kokteilidest/shottidest järjendi vms andmehulga loomist !!!!!!!!!!!! -------
+# ilmselt tasuks pigem funtksiooniks ka teha
+
 for alko_nimi, sobivad_pealekad in sobivused.items():
     alko_hind = alkoSõnastik[alko_nimi]   
     for pealeka_nimi in sobivad_pealekad:
@@ -131,3 +136,42 @@ for alko_nimi, sobivad_pealekad in sobivused.items():
 if not sobiv_kombo:
     print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud :(')
 
+#----------graafiline liides-------------
+# see peaks olema main funktsioon ilmselt
+
+
+# Me ei tea, mis summa kasutaja sisestab, seega elementide
+# arv lehel peab olema dünaamiline, selleks funktsioon
+
+def jookide_paigutus(SIIA_MEIE_ANDMEHULK):
+    read = []
+    for kokteil in SIIA_MEIE_ANDMEHULK: #!!!!!!!!!!!!!!!
+        pass
+
+
+peaakna_paigutus = [
+    [sg.Text('Sisesta oma eelarve (€):')],
+    [sg.InputText(key='-EELARVE-')],
+    [sg.Button('Teen kokteili'), sg.Button('Teen shotte'), sg.Button('Teen mõlemat'), sg.Button('Sule programm')],
+    [sg.Text('Kas võtta hinnaandmed veebist või failist?')],
+    [sg.Combo(['Kraabi hinnaandmed veebist','Loe hinnaandmed failist'],default_value='Loe hinnaandmed failist',readonly=True)], # kasutaja ei saa ise valikukasti kirjutada
+    [sg.Output(size=(60, 20))]
+]
+
+peaaken = sg.Window('Kokteiliraamat', peaakna_paigutus)
+
+kokteiliakna_paigutus = [
+    [sg.Text(f'Kokteilid {peaakna_paigutus['-EELARVE-']} piires:')],
+    [sg.Output(size=(60, 20))], # väljundkasti suurus
+    [sg.Button('Tagasi pealehele')]
+]
+
+kokteiliaken = sg.Window('Kokteilide valik', kokteiliakna_paigutus)
+
+while True:
+    sündmus, väärtused = peaaken.read()
+    if sündmus == sg.WINDOW_CLOSED or sündmus == 'Sule programm':
+        break
+
+    elif sündmus == 'Teen kokteili':
+        pass
