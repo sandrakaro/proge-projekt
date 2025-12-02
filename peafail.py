@@ -94,40 +94,28 @@ sobivused = {
 "Jägermeister": ["Coca-Cola"]
 }
 
-#Tsükkel väljastab kõik shottideks sobivad joogid, mis mahuvad eelarvesse
-while True:
-    try:
-        eelarve = float(input('Mis on Sinu eelarve (€)? '))
-        break
-    except ValueError:
-        print('Sisesta palun arvuline väärtus.')
 
-print(f'\nShotid, mis sobituvad {eelarve} € sisse:\n')
+def sobivad_shotid(alko_sonastik, eelarve):
+    shotid{}
+    for nimi, hind in alko_sonastik.items():
+        if hind <= eelarve:
+            shotid[(nimi)] = hind
+    return shotid
 
-sobiv_jook = False
 
-for nimi, hind in alkoSõnastik.items():
-    if hind <= eelarve:
-        print(f'{nimi} - {hind} €')
-        sobiv_jook = True
+def sobivad_kokteilid(alko_sonastik, pealeka_sonastik, sobivused, eelarve):
+    kokteilid = {}
 
-if not sobiv_jook:
-    print('Sellise hinnaga shotte ei leitud :(')
+    for alko_nimi, sobivad_pealekad in sobivused.items():
+        alko_hind = alko_sonastik[alko_nimi]
 
-#Tsükkel, mis väljastab jookide kombinatsioonid, mis sobivad eelarvesse
-print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve} € sisse:\n')
-
-sobiv_kombo = False
-
-for alko_nimi, sobivad_pealekad in sobivused.items():
-    alko_hind = alkoSõnastik[alko_nimi]   
-    for pealeka_nimi in sobivad_pealekad:
-            pealeka_hind = pealekaSõnastik[pealeka_nimi]
+        for pealeka_nimi in sobivad_pealekad:
+            pealeka_hind = pealeka_sonastik[pealeka_nimi]
             kogu_hind = alko_hind + pealeka_hind
-    if kogu_hind <= eelarve:
-        print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind}€')
-        sobiv_kombo = True
 
-if not sobiv_kombo:
-    print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud :(')
+            if kogu_hind <= eelarve:
+                kokteilid[(alko_nimi, pealeka_nimi)] = kogu_hind
+            
+    return kokteilid
+
 
