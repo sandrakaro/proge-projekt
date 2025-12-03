@@ -3,7 +3,7 @@
 # mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
 # ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt
-# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium ning PySimpleGUI (pip3 install teeginimi)
+# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium (pip3 install teeginimi)
 
 # Prisma robots.txt lubab kõike kraapida
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
@@ -15,7 +15,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
-import PySimpleGUI as sg
+from tkinter import *
 
 joogiFail = open('jookide-lingid.txt',encoding='utf-8')
 joogiJärjend = [el.strip().split(';') for el in joogiFail.readlines()]
@@ -105,15 +105,20 @@ while True:
 
 print(f'\nShotid, mis sobituvad {eelarve} € sisse:\n')
 
-sobiv_jook = False
 
-for nimi, hind in alkoSõnastik.items():
-    if hind <= eelarve:
-        print(f'{nimi} - {hind} €')
-        sobiv_jook = True
 
-if not sobiv_jook:
-    print('Sellise hinnaga shotte ei leitud :(')
+def leia_sobivad_shotid(eelarve):
+    sobiv_jook = False
+    global sobivad_shotid
+    sobivad_shotid = dict()
+    for nimi, hind in alkoSõnastik.items():
+        if hind <= eelarve:
+            print(f'{nimi} - {hind} €') #!!!!!
+            sobivad_shotid[nimi] = hind
+            sobiv_jook = True
+    if not sobiv_jook:
+        print('Sellise hinnaga shotte ei leitud :(')
+    return sobivad_shotid
 
 #Tsükkel, mis väljastab jookide kombinatsioonid, mis sobivad eelarvesse
 print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve} € sisse:\n')
@@ -143,35 +148,64 @@ if not sobiv_kombo:
 # Me ei tea, mis summa kasutaja sisestab, seega elementide
 # arv lehel peab olema dünaamiline, selleks funktsioon
 
-def jookide_paigutus(SIIA_MEIE_ANDMEHULK):
-    read = []
-    for kokteil in SIIA_MEIE_ANDMEHULK: #!!!!!!!!!!!!!!!
-        pass
+
+root = Tk()
+root.title('Kokteiliraamat')
+root.geometry('400x300')
+label = Label(root, text='Sisesta oma eelarve (€):')
+label.pack(pady=10)
+kasutaja_eelarve = Entry(root)
+kasutaja_eelarve.pack(pady=5)
+
+button = Button(root, text='Teen kokteile', command=näita_kokteile)
+button.pack(pady=5)
+button2 = Button(root, text='Teen shotte', command=näita_shotte)
+button2.pack(pady=5)
+button3 = Button(root, text='Teen mõlemat', command=näita_kõiki_jooke)
+button3.pack(pady=5)
+
+def näita_kokteile():
+    eelarve = kasutaja_eelarve.get()
+    # Siin peaks olema kood, mis leiab joogid ja kuvab tulemused
+    result_label.config(text=f'Sobivad joodid summas {eelarve} €')
+
+def näita_shotte():
+    pass
+def näita_kõiki_jooke():
+    pass
+
+root.mainloop()
 
 
-peaakna_paigutus = [
-    [sg.Text('Sisesta oma eelarve (€):')],
-    [sg.InputText(key='-EELARVE-')],
-    [sg.Button('Teen kokteili'), sg.Button('Teen shotte'), sg.Button('Teen mõlemat'), sg.Button('Sule programm')],
-    [sg.Text('Kas võtta hinnaandmed veebist või failist?')],
-    [sg.Combo(['Kraabi hinnaandmed veebist','Loe hinnaandmed failist'],default_value='Loe hinnaandmed failist',readonly=True)], # kasutaja ei saa ise valikukasti kirjutada
-    [sg.Output(size=(60, 20))]
-]
+# def jookide_paigutus(SIIA_MEIE_ANDMEHULK):
+#     read = []
+#     for kokteil in SIIA_MEIE_ANDMEHULK: #!!!!!!!!!!!!!!!
+#         pass
 
-peaaken = sg.Window('Kokteiliraamat', peaakna_paigutus)
 
-kokteiliakna_paigutus = [
-    [sg.Text(f'Kokteilid {peaakna_paigutus['-EELARVE-']} piires:')],
-    [sg.Output(size=(60, 20))], # väljundkasti suurus
-    [sg.Button('Tagasi pealehele')]
-]
+# peaakna_paigutus = [
+#     [sg.Text('Sisesta oma eelarve (€):')],
+#     [sg.InputText(key='-EELARVE-')],
+#     [sg.Button('Teen kokteili'), sg.Button('Teen shotte'), sg.Button('Teen mõlemat'), sg.Button('Sule programm')],
+#     [sg.Text('Kas võtta hinnaandmed veebist või failist?')],
+#     [sg.Combo(['Kraabi hinnaandmed veebist','Loe hinnaandmed failist'],default_value='Loe hinnaandmed failist',readonly=True)], # kasutaja ei saa ise valikukasti kirjutada
+#     [sg.Output(size=(60, 20))]
+# ]
 
-kokteiliaken = sg.Window('Kokteilide valik', kokteiliakna_paigutus)
+# peaaken = sg.Window('Kokteiliraamat', peaakna_paigutus)
 
-while True:
-    sündmus, väärtused = peaaken.read()
-    if sündmus == sg.WINDOW_CLOSED or sündmus == 'Sule programm':
-        break
+# kokteiliakna_paigutus = [
+#     [sg.Text(f'Kokteilid {peaakna_paigutus["-EELARVE-"]} piires:')],
+#     [sg.Output(size=(60, 20))], # väljundkasti suurus
+#     [sg.Button('Tagasi pealehele')]
+# ]
 
-    elif sündmus == 'Teen kokteili':
-        pass
+# kokteiliaken = sg.Window('Kokteilide valik', kokteiliakna_paigutus)
+
+# while True:
+#     sündmus, väärtused = peaaken.read()
+#     if sündmus == sg.WINDOW_CLOSED or sündmus == 'Sule programm':
+#         break
+
+#     elif sündmus == 'Teen kokteili':
+#         pass
