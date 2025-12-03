@@ -161,7 +161,7 @@ peaakna_paigutus = [
 peaaken = sg.Window('Kokteiliraamat', peaakna_paigutus)
 
 kokteiliakna_paigutus = [
-    [sg.Text(f'Kokteilid {peaakna_paigutus['-EELARVE-']} piires:')],
+    [sg.Text(f'Kokteilid {peaaken['-EELARVE-'].get()} piires:')],
     [sg.Output(size=(60, 20))], # väljundkasti suurus
     [sg.Button('Tagasi pealehele')]
 ]
