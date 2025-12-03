@@ -3,7 +3,7 @@
 # mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
 # ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt
-# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium (pip3 install teeginimi)
+# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium (pip3 install teeginimi või pip install teeginimi)
 
 # Prisma robots.txt lubab kõike kraapida
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
@@ -146,8 +146,17 @@ if not sobiv_kombo:
 
 
 # Me ei tea, mis summa kasutaja sisestab, seega elementide
-# arv lehel peab olema dünaamiline, selleks funktsioon
+# arv lehel peab olema dünaamiline
 
+def näita_kokteile():
+    eelarve = kasutaja_eelarve.get()
+    # Siin peaks olema kood, mis leiab joogid ja kuvab tulemused
+    result_label.config(text=f'Sobivad joodid summas {eelarve} €')
+
+def näita_shotte():
+    pass
+def näita_kõiki_jooke():
+    pass
 
 root = Tk()
 root.title('Kokteiliraamat')
@@ -164,48 +173,4 @@ button2.pack(pady=5)
 button3 = Button(root, text='Teen mõlemat', command=näita_kõiki_jooke)
 button3.pack(pady=5)
 
-def näita_kokteile():
-    eelarve = kasutaja_eelarve.get()
-    # Siin peaks olema kood, mis leiab joogid ja kuvab tulemused
-    result_label.config(text=f'Sobivad joodid summas {eelarve} €')
-
-def näita_shotte():
-    pass
-def näita_kõiki_jooke():
-    pass
-
 root.mainloop()
-
-
-# def jookide_paigutus(SIIA_MEIE_ANDMEHULK):
-#     read = []
-#     for kokteil in SIIA_MEIE_ANDMEHULK: #!!!!!!!!!!!!!!!
-#         pass
-
-
-# peaakna_paigutus = [
-#     [sg.Text('Sisesta oma eelarve (€):')],
-#     [sg.InputText(key='-EELARVE-')],
-#     [sg.Button('Teen kokteili'), sg.Button('Teen shotte'), sg.Button('Teen mõlemat'), sg.Button('Sule programm')],
-#     [sg.Text('Kas võtta hinnaandmed veebist või failist?')],
-#     [sg.Combo(['Kraabi hinnaandmed veebist','Loe hinnaandmed failist'],default_value='Loe hinnaandmed failist',readonly=True)], # kasutaja ei saa ise valikukasti kirjutada
-#     [sg.Output(size=(60, 20))]
-# ]
-
-# peaaken = sg.Window('Kokteiliraamat', peaakna_paigutus)
-
-# kokteiliakna_paigutus = [
-#     [sg.Text(f'Kokteilid {peaakna_paigutus["-EELARVE-"]} piires:')],
-#     [sg.Output(size=(60, 20))], # väljundkasti suurus
-#     [sg.Button('Tagasi pealehele')]
-# ]
-
-# kokteiliaken = sg.Window('Kokteilide valik', kokteiliakna_paigutus)
-
-# while True:
-#     sündmus, väärtused = peaaken.read()
-#     if sündmus == sg.WINDOW_CLOSED or sündmus == 'Sule programm':
-#         break
-
-#     elif sündmus == 'Teen kokteili':
-#         pass
