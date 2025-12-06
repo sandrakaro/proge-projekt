@@ -176,98 +176,95 @@ def leia_sobivad_kokteilid(eelarve):
 # Me ei tea, mis summa kasutaja sisestab, seega elementide
 # arv lehel peab olema dünaamiline
 
+def näita_tulemuste_akent(pealkiri, read):
+    tulemuste_aken = Toplevel(root)
+    tulemuste_aken.title(pealkiri)
+    tulemuste_aken.geometry('450x350')
 
-def näita_kõiki_jooke():
+    pealdis = Label(tulemuste_aken, text=pealkiri, font=('Arial', 12, 'bold'))
+    pealdis.pack(pady=8)
+
+    sisutekst = Text(tulemuste_aken, wrap='word', height=15, width=60)
+    sisutekst.pack(padx=10, pady=5, expand=True, fill='both')
+
+    if read:
+        for rida in read:
+            sisutekst.insert(END, rida + '\n')
+    else:
+        sisutekst.insert(END, 'Ühtegi tulemust selle eelarvega ei leitud.')
+
+    sulgemisnupp = Button(tulemuste_aken, text='Sule aken', command=tulemuste_aken.destroy)
+    sulgemisnupp.pack(pady=6)
+
+
+def kuva_sõnum(sõnum):
+    pealkiri = 'Teade'
+    aken = Toplevel(root)
+    aken.title(pealkiri)
+    aken.geometry('300x120')
+    Label(aken, text=sõnum, wraplength=280).pack(padx=10, pady=10)
+    Button(aken, text='OK', command=aken.destroy).pack(pady=6)
+
+def näita_kokteile():
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
-        show_message('Palun sisesta arvuline väärtus.')
+        kuva_sõnum('Palun sisesta arvuline väärtus.')
         return
     try:
         sobivad_kokteilid = leia_sobivad_kokteilid(eelarve)
     except NameError:
-        show_message('Viga: hinnad ei ole saadaval. Programm sulgub.')
+        kuva_sõnum('Viga: hinnad ei ole saadaval. Programm sulgub.')
         exit()
 
     read = []
     for (alko_nimi, pealeka_nimi), koguhind in sobivad_kokteilid.items():
         read.append(f'{alko_nimi} + {pealeka_nimi} = {koguhind} €')
 
-    show_results_window(f'Sobivad kokteilid eelarvega {eelarve} €', read)
+    näita_tulemuste_akent(f'Sobivad kokteilid eelarvega {eelarve} €', read)
 
 def näita_shotte():
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
-        show_message('Palun sisesta arvuline väärtus.')
+        kuva_sõnum('Palun sisesta arvuline väärtus.')
         return
     try:
         sobivad_shotid = leia_sobivad_shotid(eelarve)
     except NameError:
-        show_message('Viga: hinnad ei ole saadaval. Programm sulgub.')
+        kuva_sõnum('Viga: hinnad ei ole saadaval. Programm sulgub.')
         exit()
 
     read = [f'{alko_nimi} — {hind} €' for alko_nimi, hind in sobivad_shotid.items()]
-    show_results_window(f'Sobivad shotid eelarvega {eelarve} €', read)
+    näita_tulemuste_akent(f'Sobivad shotid eelarvega {eelarve} €', read)
 
-#------siin AI kood veel kontrollimata
 def näita_kõiki_jooke():
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
-        show_message('Viga', 'Sisesta kehtiv arv eelarve jaoks.')
+        kuva_sõnum('Palun sisesta arvuline väärtus.')
         return
 
     try:
         shotid = leia_sobivad_shotid(eelarve)
         kokteilid = leia_sobivad_kokteilid(eelarve)
     except NameError:
-        show_message('Viga', 'Hinnad ei ole saadaval. Käivita hindade laadimine.')
-        return
+        kuva_sõnum('Viga: hinnad ei ole saadaval. Programm sulgub.')
+        exit()
 
     lines = []
-    lines.append('--- Shotid ---')
-    lines += [f'{nimi} — {hind:.2f} €' for nimi, hind in sorted(shotid.items(), key=lambda x: x[1])]
+    lines.append(f'--- Shotid eelarvega {eelarve} ---')
+    lines += [f'{nimi} — {hind} €' for nimi, hind in shotid.items()]
     lines.append('')
-    lines.append('--- Kokteilid ---')
-    lines += [f'{alko} + {pealekas} = {hind:.2f} €' for (alko, pealekas), hind in sorted(kokteilid.items(), key=lambda x: x[1])]
+    lines.append(f'--- Kokteilid eelarvega {eelarve} ---')
+    lines += [f'{alko_nimi} + {pealeka_nimi} = {hind} €' for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
 
-    show_results_window(f'Kõik sobivad joogid — {eelarve:.2f} €', lines)
+    näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {eelarve} €', lines)
 
-
-def show_results_window(title, lines):
-    win = Toplevel(root)
-    win.title(title)
-    win.geometry('450x350')
-
-    header = Label(win, text=title, font=('Arial', 12, 'bold'))
-    header.pack(pady=8)
-
-    text = Text(win, wrap='word', height=15, width=60)
-    text.pack(padx=10, pady=5, expand=True, fill='both')
-
-    if lines:
-        for line in lines:
-            text.insert(END, line + '\n')
-    else:
-        text.insert(END, 'Ühtegi tulemust ei leitud.')
-
-    close = Button(win, text='Sulge', command=win.destroy)
-    close.pack(pady=6)
-
-
-def show_message(title, message):
-    win = Toplevel(root)
-    win.title(title)
-    win.geometry('300x120')
-    Label(win, text=message, wraplength=280).pack(padx=10, pady=10)
-    Button(win, text='OK', command=win.destroy).pack(pady=6)
-
-#---------- siin AI kood veel kontrollimata
 
 root = Tk()
 root.title('Kokteiliraamat')
-root.geometry('400x300')
+root.geometry('600x300')
 label = Label(root, text='Sisesta oma eelarve (€):')
 label.pack(pady=10)
 kasutaja_eelarve = Entry(root)
@@ -278,11 +275,13 @@ pealeht.pack(pady=10)
 
 hinnavalikud = {'Kraabi hinnad veebist' : 'y', 'Võta hinnad failist' : 'n'}
 vali_kust_hinnad = StringVar(value='n')
+i = 0
 for nupu_tekst, väärtus in hinnavalikud.items():
-    Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w')
+    Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w', row = 1, column = i, padx=5, pady=5)
+    i+=1
 
 kokteili_nupp = Button(pealeht, text='Teen kokteile', command=näita_kokteile).grid(row=0, column=0, padx=5, pady=5)
 shoti_nupp = Button(pealeht, text='Teen shotte', command=näita_shotte).grid(row=0, column=1, padx=5, pady=5)
-mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=0, column=2, padx=5 pady=5)
+mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=0, column=2, padx=5, pady=5)
 
 root.mainloop()
