@@ -2,7 +2,7 @@
 # ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide või shottide kohta,
 # mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
-# ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt, tkinteri loomiseks TheCodex videod Youtube'is
+# ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt, Tkinteri GUI loomiseks TheCodex videod Youtube'is
 # ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium (pip3 install teeginimi või pip install teeginimi)
 
 # Prisma robots.txt lubab kõike kraapida
@@ -35,7 +35,7 @@ for osa in joogiJärjend:
         if '---' not in tekst:
             pealekaNimed.append(tekst)
 
-def kas_hinnad_veebist(kasKontroll):
+def leia_hinnad(kasKontroll):
     hinnaSõnastik = dict()
     if kasKontroll == 'y':
         hinnaFail = open('jookide-hinnad-veebist.txt','w',encoding='utf-8')
@@ -68,10 +68,6 @@ def kas_hinnad_veebist(kasKontroll):
         hinnaFail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
         hinnaSõnastik = {nimi:float(hind) for nimi,hind in (rida.strip().split(';') for rida in hinnaFail)}
         hinnaFail.close()
-    # see error handling peaks guisse tulema:
-    # else:
-    #     print('Sisestasid ebasobiva väärtuse, programm lõpetab töö.')
-    #     exit()
     global alkoSõnastik, pealekaSõnastik
     alkoSõnastik = {nimi:hind for nimi, hind in hinnaSõnastik.items() if nimi in alkoNimed}
     pealekaSõnastik = {nimi:hind for nimi,hind in hinnaSõnastik.items() if nimi in pealekaNimed}
@@ -95,55 +91,6 @@ sobivused = {
 #Jääger ja coca
 "Jägermeister": ["Coca-Cola"]
 }
-
-#Tsükkel väljastab kõik shottideks sobivad joogid, mis mahuvad eelarvesse
-# while True:
-#     try:
-#         eelarve = float(input('Mis on Sinu eelarve (€)? '))
-#         break
-#     except ValueError:
-#         print('Sisesta palun arvuline väärtus.')
-
-# print(f'\nShotid, mis sobituvad {eelarve} € sisse:\n')
-
-
-
-# def leia_sobivad_shotid(eelarve):
-#     sobiv_jook = False
-#     global sobivad_shotid
-#     sobivad_shotid = dict()
-#     for nimi, hind in alkoSõnastik.items():
-#         if hind <= eelarve:
-#             print(f'{nimi} - {hind} €') #!!!!!
-#             sobivad_shotid[nimi] = hind
-#             sobiv_jook = True
-#     if not sobiv_jook:
-#         print('Sellise hinnaga shotte ei leitud :(')
-#     return sobivad_shotid
-
-# #Tsükkel, mis väljastab jookide kombinatsioonid, mis sobivad eelarvesse
-# print(f'\nSobivad joogikombinatsioonid, mis sobituvad {eelarve} € sisse:\n')
-
-# sobiv_kombo = False
-
-# -------- !!!!!!!!!!!! siin (tglt varem) alustada kasutaja
-# kokteilidest/shottidest järjendi vms andmehulga loomist !!!!!!!!!!!! -------
-# ilmselt tasuks pigem funtksiooniks ka teha
-
-# for alko_nimi, sobivad_pealekad in sobivused.items():
-#     alko_hind = alkoSõnastik[alko_nimi]   
-#     for pealeka_nimi in sobivad_pealekad:
-#             pealeka_hind = pealekaSõnastik[pealeka_nimi]
-#             kogu_hind = alko_hind + pealeka_hind
-#     if kogu_hind <= eelarve:
-#         print(f'{alko_nimi} + {pealeka_nimi} = {kogu_hind}€')
-#         sobiv_kombo = True
-
-# if not sobiv_kombo:
-#     print(f'Ühtegi sobivat jookide kombinatsiooni selle eelarvega ei leitud :(')
-
-
-
 
 
 def leia_sobivad_shotid(eelarve):
@@ -254,10 +201,10 @@ def näita_kõiki_jooke():
 
     lines = []
     lines.append(f'--- Shotid eelarvega {eelarve} ---')
-    lines += [f'{nimi} — {hind} €' for nimi, hind in shotid.items()]
+    lines += [f'{nimi} — {round(hind,2)} €' for nimi, hind in shotid.items()]
     lines.append('')
     lines.append(f'--- Kokteilid eelarvega {eelarve} ---')
-    lines += [f'{alko_nimi} + {pealeka_nimi} = {hind} €' for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
+    lines += [f'{alko_nimi} + {pealeka_nimi} = {round(hind,2)} €' for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
 
     näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {eelarve} €', lines)
 
@@ -275,11 +222,13 @@ pealeht.pack(pady=10)
 
 hinnavalikud = {'Kraabi hinnad veebist' : 'y', 'Võta hinnad failist' : 'n'}
 vali_kust_hinnad = StringVar(value='n')
-i = 0
+i = 1
 for nupu_tekst, väärtus in hinnavalikud.items():
-    Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w', row = 1, column = i, padx=5, pady=5)
+    Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w', row = i, column = 1, padx=5, pady=5)
     i+=1
 
+leia_hinnad(vali_kust_hinnad.get())
+print(leia_hinnad(vali_kust_hinnad.get()))
 kokteili_nupp = Button(pealeht, text='Teen kokteile', command=näita_kokteile).grid(row=0, column=0, padx=5, pady=5)
 shoti_nupp = Button(pealeht, text='Teen shotte', command=näita_shotte).grid(row=0, column=1, padx=5, pady=5)
 mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=0, column=2, padx=5, pady=5)
