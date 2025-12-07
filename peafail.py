@@ -1,9 +1,12 @@
 # ---Projekti pealkiri: kokteiliraamat??????????????
-# ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide või shottide kohta,
-# mida saab selle raha eest teha
+# ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide
+# või shottide kohta, mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
-# ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade projekt, Tkinteri GUI loomiseks TheCodex videod Youtube'is
-# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium (pip3 install teeginimi või pip install teeginimi)
+# ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade
+# projekt, Tkinteri GUI loomiseks TheCodex videod Youtube'is
+# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium
+# (pip3 install teeginimi või pip install teeginimi), lisaks on vajalik Chrome brauser, kuid
+# soovi korral võib ka koodis asendada leia_hinnad f-ni koodi oma brauserile mõelduga
 
 # Prisma robots.txt lubab kõike kraapida
 # Ühe URL-i requestimine võtab veits kaua aega, wait 10 s soovitas Gemini
@@ -116,12 +119,7 @@ def leia_sobivad_kokteilid(eelarve):
 
 
 
-#----------graafiline liides-------------
-# see peaks olema main funktsioon ilmselt
-
-
-# Me ei tea, mis summa kasutaja sisestab, seega elementide
-# arv lehel peab olema dünaamiline
+#----------graafilise liidese funktsioonid-------------
 
 def näita_tulemuste_akent(pealkiri, read):
     tulemuste_aken = Toplevel(root)
@@ -140,9 +138,6 @@ def näita_tulemuste_akent(pealkiri, read):
     else:
         sisutekst.insert(END, 'Ühtegi tulemust selle eelarvega ei leitud.')
 
-    sulgemisnupp = Button(tulemuste_aken, text='Sule aken', command=tulemuste_aken.destroy)
-    sulgemisnupp.pack(pady=6)
-
 
 def kuva_sõnum(sõnum):
     pealkiri = 'Teade'
@@ -153,6 +148,7 @@ def kuva_sõnum(sõnum):
     Button(aken, text='OK', command=aken.destroy).pack(pady=6)
 
 def näita_kokteile():
+    leia_hinnad(vali_kust_hinnad.get())
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
@@ -171,6 +167,7 @@ def näita_kokteile():
     näita_tulemuste_akent(f'Sobivad kokteilid eelarvega {eelarve} €', read)
 
 def näita_shotte():
+    leia_hinnad(vali_kust_hinnad.get())
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
@@ -186,6 +183,7 @@ def näita_shotte():
     näita_tulemuste_akent(f'Sobivad shotid eelarvega {eelarve} €', read)
 
 def näita_kõiki_jooke():
+    leia_hinnad(vali_kust_hinnad.get())
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
@@ -208,6 +206,8 @@ def näita_kõiki_jooke():
 
     näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {eelarve} €', lines)
 
+#----------graafilise liidese kood-------------
+# see peaks olema main funktsioon ilmselt??
 
 root = Tk()
 root.title('Kokteiliraamat')
@@ -222,15 +222,13 @@ pealeht.pack(pady=10)
 
 hinnavalikud = {'Kraabi hinnad veebist' : 'y', 'Võta hinnad failist' : 'n'}
 vali_kust_hinnad = StringVar(value='n')
-i = 1
+i = 0
 for nupu_tekst, väärtus in hinnavalikud.items():
     Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w', row = i, column = 1, padx=5, pady=5)
     i+=1
 
-leia_hinnad(vali_kust_hinnad.get())
-print(leia_hinnad(vali_kust_hinnad.get()))
-kokteili_nupp = Button(pealeht, text='Teen kokteile', command=näita_kokteile).grid(row=0, column=0, padx=5, pady=5)
-shoti_nupp = Button(pealeht, text='Teen shotte', command=näita_shotte).grid(row=0, column=1, padx=5, pady=5)
-mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=0, column=2, padx=5, pady=5)
+kokteili_nupp = Button(pealeht, text='Teen kokteile', command=näita_kokteile).grid(row=2, column=0, padx=5, pady=5)
+shoti_nupp = Button(pealeht, text='Teen shotte', command=näita_shotte).grid(row=2, column=1, padx=5, pady=5)
+mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=2, column=2, padx=5, pady=5)
 
 root.mainloop()
