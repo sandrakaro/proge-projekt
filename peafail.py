@@ -4,7 +4,7 @@
 # ---Autorid: Greteliis Kokk, Sandra Karo
 # ---Eeskujuna kasutatud allikad: idee inspiratsiooniks eelmiste aastate energiajookide ja piima hindade
 # projekt, Tkinteri GUI loomiseks TheCodex videod Youtube'is
-# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium
+# ---Muu oluline info: programmi kasutamiseks tuleb installida teegid bs4, selenium, pillow
 # (pip3 install teeginimi või pip install teeginimi), lisaks on vajalik Chrome brauser, kuid
 # soovi korral võib ka koodis asendada leia_hinnad f-ni koodi oma brauserile mõelduga
 
@@ -19,6 +19,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from time import sleep
 from tkinter import *
+from PIL import ImageTk, Image
 
 joogiFail = open('jookide-lingid.txt',encoding='utf-8')
 joogiJärjend = [el.strip().split(';') for el in joogiFail.readlines()]
@@ -137,7 +138,6 @@ def näita_tulemuste_akent(pealkiri, read):
             sisutekst.insert(END, rida + '\n')
     else:
         sisutekst.insert(END, 'Ühtegi tulemust selle eelarvega ei leitud.')
-
 
 def kuva_sõnum(sõnum):
     pealkiri = 'Teade'
