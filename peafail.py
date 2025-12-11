@@ -36,8 +36,10 @@ for osa in joogiJärjend:
             pealekaNimed.append(tekst)
 
 def kas_hinnad_veebist(kasKontroll):
+    print("kas_hinnad_veebist läks käima, kasKontroll =", kasKontroll)
     hinnaSõnastik = dict()
     if kasKontroll == 'y':
+        print("Alustan kraapimist veebist") #lis kontrollin terminalist kas funkt. hakkas üldse tööle
         hinnaFail = open('jookide-hinnad-veebist.txt','w',encoding='utf-8')
         options = webdriver.ChromeOptions()
         options.add_argument('--headless') # ei ava reaalset brauseri akent
@@ -63,7 +65,8 @@ def kas_hinnad_veebist(kasKontroll):
             sleep(2) # ootame 2 s enne järgmist päringut, et päringuid ei lükataks tagasi
         driver.quit()
         hinnaFail.close()
-    elif kasKontroll == 'n': # Kasutame seda koodi testimisel, et mitte serverist bänni saada
+    elif kasKontroll == 'n':
+        print("Loen hinnad failist") # Kasutame seda koodi testimisel, et mitte serverist bänni saada
         print('Selge! Võtan hinnad olemasolevast failist.\n')
         hinnaFail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
         hinnaSõnastik = {nimi:float(hind) for nimi,hind in (rida.strip().split(';') for rida in hinnaFail)}
@@ -177,6 +180,9 @@ def leia_sobivad_kokteilid(eelarve):
 # arv lehel peab olema dünaamiline
 
 def näita_kokteile():
+
+    lae_hinnad_kui_vaja()
+
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
@@ -195,34 +201,35 @@ def näita_kokteile():
     show_results_window(f'Sobivad kokteilid eelarvega {eelarve} €', read)
 
 def näita_shotte():
+
+    lae_hinnad_kui_vaja()
+
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
         show_message('Palun sisesta arvuline väärtus.')
         return
-    try:
-        sobivad_shotid = leia_sobivad_shotid(eelarve)
-    except NameError:
-        show_message('Viga: hinnad ei ole saadaval. Programm sulgub.')
-        exit()
+    
+    sobivad_shotid = leia_sobivad_shotid(eelarve)
 
     read = [f'{alko_nimi} — {hind} €' for alko_nimi, hind in sobivad_shotid.items()]
     show_results_window(f'Sobivad shotid eelarvega {eelarve} €', read)
 
 #------siin AI kood veel kontrollimata
 def näita_kõiki_jooke():
+
+    lae_hinnad_kui_vaja() #tegin uue funktsiooni
+
     try:
         eelarve = float(kasutaja_eelarve.get())
     except ValueError:
         show_message('Viga', 'Sisesta kehtiv arv eelarve jaoks.')
         return
 
-    try:
-        shotid = leia_sobivad_shotid(eelarve)
-        kokteilid = leia_sobivad_kokteilid(eelarve)
-    except NameError:
-        show_message('Viga', 'Hinnad ei ole saadaval. Käivita hindade laadimine.')
-        return
+   
+    shotid = leia_sobivad_shotid(eelarve)
+    kokteilid = leia_sobivad_kokteilid(eelarve)
+   
 
     lines = []
     lines.append('--- Shotid ---')
@@ -242,14 +249,22 @@ def show_results_window(title, lines):
     header = Label(win, text=title, font=('Arial', 12, 'bold'))
     header.pack(pady=8)
 
-    text = Text(win, wrap='word', height=15, width=60)
-    text.pack(padx=10, pady=5, expand=True, fill='both')
+    frame = Frame(win)
+    frame.pack(padx=10, pady=10, expand=True, fill='both')
+
+    scrollbar = Scrollbar(frame)
+    scrollbar.pack(side=RIGHT, fill=Y)
+
+    text = Text(frame, wrap='word', height=15, width=60, yscrollcommand=scrollbar.set)
+    text.pack(side=LEFT, expand=True, fill='both')
+
+    scrollbar.config(command=text.yview)
 
     if lines:
         for line in lines:
             text.insert(END, line + '\n')
     else:
-        text.insert(END, 'Ühtegi tulemust ei leitud.')
+            text.insert(END, 'Ühtegi tulemust ei leitud.')
 
     close = Button(win, text='Sulge', command=win.destroy)
     close.pack(pady=6)
@@ -277,11 +292,34 @@ pealeht.pack(pady=10)
 
 hinnavalikud = {'Kraabi hinnad veebist' : 'y', 'Võta hinnad failist' : 'n'}
 vali_kust_hinnad = StringVar(value='n')
-for nupu_tekst, väärtus in hinnavalikud.items():
-    Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w')
 
-kokteili_nupp = Button(pealeht, text='Teen kokteile', command=näita_kokteile).grid(row=0, column=0, padx=5, pady=5)
-shoti_nupp = Button(pealeht, text='Teen shotte', command=näita_shotte).grid(row=0, column=1, padx=5, pady=5)
-mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=0, column=2, padx=5 pady=5)
+for i, (nupu_tekst, väärtus) in enumerate( hinnavalikud.items()):
+    Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(row=i, column=0, columnspan=3, sticky="w", pady=2)
+
+hinnad_laetud = False
+laadimis_aken = None
+def lae_hinnad_kui_vaja():
+    global hinnad_laetud, laadimis_aken
+    if not hinnad_laetud:
+        kasKontroll = vali_kust_hinnad.get()
+
+        if kasKontroll == 'y':
+            laadimis_aken = Toplevel(root)
+            laadimis_aken.title('Kraabin hindu')
+            msg = Label(laadimis_aken, text='Kraabin hindu veebist, palun oota.', padx=20, pady=20)
+            msg.pack()
+            laadimis_aken.update()
+
+        kas_hinnad_veebist(kasKontroll)
+        hinnad_laetud = True
+
+        if laadimis_aken is not None:
+            laadimis_aken.destroy()
+            laadimis_aken = None
+        
+
+kokteili_nupp = Button(pealeht, text='Teen kokteile', command=näita_kokteile).grid(row=2, column=0, padx=5, pady=5)
+shoti_nupp = Button(pealeht, text='Teen shotte', command=näita_shotte).grid(row=2, column=1, padx=5, pady=5)
+mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=näita_kõiki_jooke).grid(row=2, column=2, padx=5, pady=5)
 
 root.mainloop()
