@@ -17,47 +17,48 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from time import sleep
 from tkinter import *
 from PIL import ImageTk, Image
+from time import sleep
+from math import floor
 
-joogiFail = open('jookide-lingid.txt',encoding='utf-8')
-joogiJärjend = [el.strip().split(';') for el in joogiFail.readlines()]
-joogiFail.close()
-joogiSõnastik = {el[0]: el[1] for el in joogiJärjend if '---' not in el[0]} # loome sõnastiku, kust saab otsida jookide linke joogi nime järgi; ei arvesta kolme sidekriipsuga tootekategooriaid
+joogifail = open('jookide-lingid.txt',encoding='utf-8')
+joogijärjend = [el.strip().split(';') for el in joogifail.readlines()]
+joogifail.close()
+joogisõnastik = {el[0]: el[1] for el in joogijärjend if '---' not in el[0]} # loome sõnastiku, kust saab otsida jookide linke joogi nime järgi; ei arvesta kolme sidekriipsuga tootekategooriaid
 
-alkoNimed = []
-pealekaNimed = []
+alko_nimed = []
+pealeka_nimed = []
 lipp = 0
-for osa in joogiJärjend:
+for osa in joogijärjend:
     tekst = osa[0]
     if tekst != '---pealekas' and not lipp:
         if '---' not in tekst:
-            alkoNimed.append(tekst)
+            alko_nimed.append(tekst)
     else:
         lipp = 1
         if '---' not in tekst:
-            pealekaNimed.append(tekst)
+            pealeka_nimed.append(tekst)
 
-def leia_hinnad(kasKontroll):
-    hinnaSõnastik = dict()
-    if kasKontroll == 'y':
-        hinnaFail = open('jookide-hinnad-veebist.txt','w',encoding='utf-8')
+def leia_hinnad(kas_kontroll_veebist):
+    hinnasõnastik = dict()
+    if kas_kontroll_veebist == 'y':
+        hinnafail = open('jookide-hinnad-veebist.txt','w',encoding='utf-8')
         options = webdriver.ChromeOptions()
         options.add_argument('--headless') # ei ava reaalset brauseri akent
         driver = webdriver.Chrome(options=options) # kasutab brauserina Google Chrome'i
-        for nimi,link in joogiSõnastik.items():
+        for nimi,link in joogisõnastik.items():
             try:
                 driver.get(link) # avab soovitud joogi lingi
-                wait = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span[data-test-id='display-price']"))) # ootab kuni JavaScripti hind on lehel laetud
-                päringuSisu = driver.page_source
-                soup = BeautifulSoup(päringuSisu, 'html.parser')
-                hinnaElement = soup.find('span', attrs={'data-test-id': 'display-price'})
-                if hinnaElement:
-                    hind = hinnaElement.text.strip().split('€')[0] # ei anna liitrihinda ega euromärki
+                ooteaeg = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span[data-test-id='display-price']"))) # ootab kuni JavaScripti hind on lehel laetud
+                päringu_sisu = driver.page_source
+                supp = BeautifulSoup(päringu_sisu, 'html.parser')
+                hinna_element = supp.find('span', attrs={'data-test-id': 'display-price'})
+                if hinna_element:
+                    hind = hinna_element.text.strip().split('€')[0] # ei anna liitrihinda ega euromärki
                     hind = float(hind.replace(',','.')) # teeme komaga hinna ujukomaarvuks
-                    hinnaSõnastik[nimi] = hind
-                    hinnaFail.write(f'{nimi};{hind}' + '\n')
+                    hinnasõnastik[nimi] = hind
+                    hinnafail.write(f'{nimi};{hind}' + '\n')
                 else:
                     print('Hinda ei leitud, kontrolli otsingu parameetreid')
                     break
@@ -66,16 +67,16 @@ def leia_hinnad(kasKontroll):
                 break
             sleep(2) # ootame 2 s enne järgmist päringut, et päringuid ei lükataks tagasi
         driver.quit()
-        hinnaFail.close()
-    elif kasKontroll == 'n': # Kasutame seda koodi testimisel, et mitte serverist bänni saada
+        hinnafail.close()
+    elif kas_kontroll_veebist == 'n': # Kasutame seda koodi testimisel, et mitte serverist bänni saada
         print('Selge! Võtan hinnad olemasolevast failist.\n')
-        hinnaFail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
-        hinnaSõnastik = {nimi:float(hind) for nimi,hind in (rida.strip().split(';') for rida in hinnaFail)}
-        hinnaFail.close()
-    global alkoSõnastik, pealekaSõnastik
-    alkoSõnastik = {nimi:hind for nimi, hind in hinnaSõnastik.items() if nimi in alkoNimed}
-    pealekaSõnastik = {nimi:hind for nimi,hind in hinnaSõnastik.items() if nimi in pealekaNimed}
-    #return (alkoSõnastik, pealekaSõnastik)
+        hinnafail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
+        hinnasõnastik = {nimi:float(hind) for nimi,hind in (rida.strip().split(';') for rida in hinnafail)}
+        hinnafail.close()
+    global alko_sõnastik, pealeka_sõnastik
+    alko_sõnastik = {nimi:hind for nimi, hind in hinnasõnastik.items() if nimi in alko_nimed}
+    pealeka_sõnastik = {nimi:hind for nimi,hind in hinnasõnastik.items() if nimi in pealeka_nimed}
+    #return (alko_sõnastik, pealeka_sõnastik)
     # ei tea kas seda returni vaja
 
 sobivused = {
@@ -99,7 +100,7 @@ sobivused = {
 
 def leia_sobivad_shotid(eelarve):
     shotid_eelarves = dict()
-    for nimi, hind in alkoSõnastik.items():
+    for nimi, hind in alko_sõnastik.items():
         if hind <= eelarve:
             shotid_eelarves[nimi] = hind
     return shotid_eelarves
@@ -108,10 +109,10 @@ def leia_sobivad_shotid(eelarve):
 def leia_sobivad_kokteilid(eelarve):
     kokteilid_eelarves = {}
     for alko_nimi, sobivad_pealekad in sobivused.items():
-        alko_hind = alkoSõnastik[alko_nimi]
+        alko_hind = alko_sõnastik[alko_nimi]
 
         for pealeka_nimi in sobivad_pealekad:
-            pealeka_hind = pealekaSõnastik[pealeka_nimi]
+            pealeka_hind = pealeka_sõnastik[pealeka_nimi]
             kogu_hind = alko_hind + pealeka_hind
 
             if kogu_hind <= eelarve:
@@ -151,6 +152,10 @@ def näita_kokteile():
     leia_hinnad(vali_kust_hinnad.get())
     try:
         eelarve = float(kasutaja_eelarve.get())
+        if floor(eelarve) == eelarve:
+            vormistatud_eelarve = str(int(eelarve))
+        else:
+            vormistatud_eelarve = f'{eelarve:.2f}'
     except ValueError:
         kuva_sõnum('Palun sisesta arvuline väärtus.')
         return
@@ -162,14 +167,18 @@ def näita_kokteile():
 
     read = []
     for (alko_nimi, pealeka_nimi), koguhind in sobivad_kokteilid.items():
-        read.append(f'{alko_nimi} + {pealeka_nimi} = {koguhind} €')
+        read.append(f'{alko_nimi} + {pealeka_nimi} = {round(koguhind,2)} €')
 
-    näita_tulemuste_akent(f'Sobivad kokteilid eelarvega {eelarve} €', read)
+    näita_tulemuste_akent(f'Sobivad kokteilid eelarvega {vormistatud_eelarve} €', read)
 
 def näita_shotte():
     leia_hinnad(vali_kust_hinnad.get())
     try:
         eelarve = float(kasutaja_eelarve.get())
+        if floor(eelarve) == eelarve:
+            vormistatud_eelarve = str(int(eelarve))
+        else:
+            vormistatud_eelarve = f'{eelarve:.2f}'
     except ValueError:
         kuva_sõnum('Palun sisesta arvuline väärtus.')
         return
@@ -179,13 +188,17 @@ def näita_shotte():
         kuva_sõnum('Viga: hinnad ei ole saadaval. Programm sulgub.')
         exit()
 
-    read = [f'{alko_nimi} — {hind} €' for alko_nimi, hind in sobivad_shotid.items()]
-    näita_tulemuste_akent(f'Sobivad shotid eelarvega {eelarve} €', read)
+    read = [f'{alko_nimi} — {round(hind,2)} €' for alko_nimi, hind in sobivad_shotid.items()]
+    näita_tulemuste_akent(f'Sobivad shotid eelarvega {vormistatud_eelarve} €', read)
 
 def näita_kõiki_jooke():
     leia_hinnad(vali_kust_hinnad.get())
     try:
         eelarve = float(kasutaja_eelarve.get())
+        if floor(eelarve) == eelarve:
+            vormistatud_eelarve = str(int(eelarve))
+        else:
+            vormistatud_eelarve = f'{eelarve:.2f}'
     except ValueError:
         kuva_sõnum('Palun sisesta arvuline väärtus.')
         return
@@ -198,13 +211,13 @@ def näita_kõiki_jooke():
         exit()
 
     lines = []
-    lines.append(f'--- Shotid eelarvega {eelarve} ---')
+    lines.append(f'--- Shotid eelarvega {vormistatud_eelarve} € ---')
     lines += [f'{nimi} — {round(hind,2)} €' for nimi, hind in shotid.items()]
     lines.append('')
-    lines.append(f'--- Kokteilid eelarvega {eelarve} ---')
+    lines.append(f'--- Kokteilid eelarvega {vormistatud_eelarve} € ---')
     lines += [f'{alko_nimi} + {pealeka_nimi} = {round(hind,2)} €' for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
 
-    näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {eelarve} €', lines)
+    näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {vormistatud_eelarve} €', lines)
 
 #----------graafilise liidese kood-------------
 # see peaks olema main funktsioon ilmselt??
