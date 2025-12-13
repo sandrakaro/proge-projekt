@@ -43,6 +43,7 @@ for osa in joogijärjend:
 def leia_hinnad(kas_kontroll_veebist):
     hinnasõnastik = dict()
     if kas_kontroll_veebist == 'y':
+        laadimisaken = kuva_sõnum('Kraabin hindu veebist, palun oota.') ####!!!!! Kuulub GUI koodi hulka !!!!!!
         hinnafail = open('jookide-hinnad-veebist.txt','w',encoding='utf-8')
         options = webdriver.ChromeOptions()
         options.add_argument('--headless') # ei ava reaalset brauseri akent
@@ -50,7 +51,7 @@ def leia_hinnad(kas_kontroll_veebist):
         for nimi,link in joogisõnastik.items():
             try:
                 driver.get(link) # avab soovitud joogi lingi
-                ooteaeg = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span[data-test-id='display-price']"))) # ootab kuni JavaScripti hind on lehel laetud
+                WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "span[data-test-id='display-price']"))) # ootab kuni JavaScripti hind on lehel laetud
                 päringu_sisu = driver.page_source
                 supp = BeautifulSoup(päringu_sisu, 'html.parser')
                 hinna_element = supp.find('span', attrs={'data-test-id': 'display-price'})
@@ -68,6 +69,8 @@ def leia_hinnad(kas_kontroll_veebist):
             sleep(2) # ootame 2 s enne järgmist päringut, et päringuid ei lükataks tagasi
         driver.quit()
         hinnafail.close()
+        if laadimisaken is not None:
+            laadimisaken.destroy() ####!!!!! Kuulub GUI koodi hulka !!!!!!
     elif kas_kontroll_veebist == 'n': # Kasutame seda koodi testimisel, et mitte serverist bänni saada
         print('Selge! Võtan hinnad olemasolevast failist.\n')
         hinnafail = open('jookide-hinnad-veebist.txt','r',encoding='utf-8')
@@ -76,8 +79,6 @@ def leia_hinnad(kas_kontroll_veebist):
     global alko_sõnastik, pealeka_sõnastik
     alko_sõnastik = {nimi:hind for nimi, hind in hinnasõnastik.items() if nimi in alko_nimed}
     pealeka_sõnastik = {nimi:hind for nimi,hind in hinnasõnastik.items() if nimi in pealeka_nimed}
-    #return (alko_sõnastik, pealeka_sõnastik)
-    # ei tea kas seda returni vaja
 
 sobivused = {
 # Viinad ja pealekas
@@ -131,14 +132,25 @@ def näita_tulemuste_akent(pealkiri, read):
     pealdis = Label(tulemuste_aken, text=pealkiri, font=('Arial', 12, 'bold'))
     pealdis.pack(pady=8)
 
-    sisutekst = Text(tulemuste_aken, wrap='word', height=15, width=60)
+    raam = Frame(tulemuste_aken)
+    raam.pack(padx=10, pady=10, expand=True, fill='both')
+
+    kerimisriba = Scrollbar(raam)
+    kerimisriba.pack(side=RIGHT, fill=Y)
+
+    sisutekst = Text(raam, wrap='word', height=15, width=60, yscrollcommand = kerimisriba.set)
     sisutekst.pack(padx=10, pady=5, expand=True, fill='both')
 
+    kerimisriba.config(command=sisutekst.yview)
+
+    sisutekst.config(state=NORMAL)
     if read:
         for rida in read:
             sisutekst.insert(END, rida + '\n')
     else:
         sisutekst.insert(END, 'Ühtegi tulemust selle eelarvega ei leitud.')
+    
+    sisutekst.config(state=DISABLED) # Kasutaja ei saa teksti muuta
 
 def kuva_sõnum(sõnum):
     pealkiri = 'Teade'
@@ -147,6 +159,8 @@ def kuva_sõnum(sõnum):
     aken.geometry('300x120')
     Label(aken, text=sõnum, wraplength=280).pack(padx=10, pady=10)
     Button(aken, text='OK', command=aken.destroy).pack(pady=6)
+    aken.update()
+    return aken # nii on võimalik akent hiljem sulgeda
 
 def näita_kokteile():
     leia_hinnad(vali_kust_hinnad.get())
