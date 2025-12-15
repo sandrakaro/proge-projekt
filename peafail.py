@@ -128,17 +128,10 @@ def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata
     kanvas.pack(side=LEFT, fill=BOTH, expand=True, padx=10, pady=5)
     kerimisriba.pack(side=RIGHT, fill=Y)
 
-    # sisutekst = Text(pearaam, wrap='word', height=15, width=60, yscrollcommand = kerimisriba.set)
-    # sisutekst.pack(padx=10, pady=5, expand=True, fill='both')
-
-    # kerimisriba.config(command=sisutekst.yview)
-
-    # sisutekst.config(state=NORMAL)
     if read:
         if mida_näidata == 'shotid':
             i=0
             for rida in read:
-                # sisutekst.insert(END, rida + '\n')
                 rea_raam = Frame(kerimisriba_raam)
                 rea_raam.pack(fill=X, padx=5, pady=5)
                 lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed[i]))
@@ -146,56 +139,40 @@ def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata
                 teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)
                 i+=1
+
         elif mida_näidata == 'kokteilid':
-            i=0
-            for rida in read:
+            for i, rida in enumerate(read):
                 rea_raam = Frame(kerimisriba_raam)
                 rea_raam.pack(fill=X, padx=5, pady=5)
                 lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed[i][0]))
                 lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed[i][1]))
-
                 teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)
-                i+=1
+
         elif mida_näidata == 'mõlemad':
             i=0
             shottide_arv = len(sobivate_jookide_nimed['shotid'])
-            kokteilide_arv = len(sobivate_jookide_nimed['kokteilid'])
             for rida in read[:shottide_arv+1]: # arvestab shotte
-                if '---' in rida: # tähendab, et tegu on vahepealkirjaga
-                    rea_raam = Frame(kerimisriba_raam)
-                    rea_raam.pack(fill=X, padx=5, pady=5)
-                    teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
-                    teksti_väli.pack(side=LEFT, padx=10, expand=True)
-                else:
-                    rea_raam = Frame(kerimisriba_raam)
-                    rea_raam.pack(fill=X, padx=5, pady=5)
+                rea_raam = Frame(kerimisriba_raam)
+                rea_raam.pack(fill=X, padx=5, pady=5)
+                if not '---' in rida and rida != '': # tähendab, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['shotid'][i]))
-
-                    teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
-                    teksti_väli.pack(side=LEFT, padx=10, expand=True)
                     i+=1
+                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
+                teksti_väli.pack(side=LEFT, padx=10, expand=True)
+
             i=0
             for rida in read[shottide_arv+1:]: # arvestab kokteile
-                if '---' in rida: # tähendab, et tegu on vahepealkirjaga
-                    rea_raam = Frame(kerimisriba_raam)
-                    rea_raam.pack(fill=X, padx=5, pady=5)
-                    teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
-                    teksti_väli.pack(side=LEFT, padx=10, expand=True)
-                else:
-                    rea_raam = Frame(kerimisriba_raam)
-                    rea_raam.pack(fill=X, padx=5, pady=5)
+                rea_raam = Frame(kerimisriba_raam)
+                rea_raam.pack(fill=X, padx=5, pady=5)
+                if not '---' in rida and rida != '': # tähendab, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['kokteilid'][i][0]))
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['kokteilid'][i][1]))
-                    teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
-                    teksti_väli.pack(side=LEFT, padx=10, expand=True)
                     i+=1
-
-                        
+                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
+                teksti_väli.pack(side=LEFT, padx=10, expand=True)         
     else:
         Label(kerimisriba_raam, text='Ühtegi tulemust selle eelarvega ei leitud.')
-    
-    # sisutekst.config(state=DISABLED) # Kasutaja ei saa väljastatud teksti muuta
 
 
 def kuva_sõnum(sõnum, juuraken):
@@ -265,8 +242,8 @@ def näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko
     shotid = leia_sobivad_shotid(eelarve, alko_sõnastik)
     kokteilid = leia_sobivad_kokteilid(eelarve, alko_sõnastik, pealeka_sõnastik, sobivused)
 
-    sobivate_shottide_nimed = [alko_nimi for alko_nimi in shotid]
-    sobivate_kokteilide_nimed = [[alko_nimi, pealeka_nimi] for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
+    sobivate_shottide_nimed = list(shotid.keys())
+    sobivate_kokteilide_nimed = [[alko, pealeka] for (alko, pealeka) in kokteilid]
 
     read = []
     read.append(f'--- Shotid eelarvega {vormistatud_eelarve} € ---')
