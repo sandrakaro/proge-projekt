@@ -19,7 +19,6 @@ from PIL import ImageTk, Image
 from time import sleep
 from math import floor
 
-
 #----------peaprogrammi funtksioonid-------------
 
 def leia_hinnad(kas_kontroll_veebist, joogisõnastik, alko_nimed, pealeka_nimed, juuraken):
@@ -108,17 +107,19 @@ def lisa_pilt(vanemraam, pildi_tee):
 
 def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata, juuraken):
     tulemuste_aken = Toplevel(juuraken)
+    tulemuste_aken.configure(bg="#F7B8F5")
     tulemuste_aken.title(pealkiri)
     tulemuste_aken.geometry('450x350')
 
-    pealdis = Label(tulemuste_aken, text=pealkiri, font=('Arial', 12, 'bold'))
+    pealdis = Label(tulemuste_aken, text=pealkiri,bg="#F7B8F5", font=('Arial', 12, 'bold'))
     pealdis.pack(pady=8)
 
-    kanvas = Canvas(tulemuste_aken)
+    kanvas = Canvas(tulemuste_aken, bg="#F7B8F5")
 
+    kanvas = Canvas(tulemuste_aken, bg="#F7B8F5")
     kerimisriba = Scrollbar(tulemuste_aken)
     kerimisriba.config(command=kanvas.yview)
-    kerimisriba_raam = Frame(kanvas)
+    kerimisriba_raam = Frame(kanvas, bg="#F7B8F5")
 
     kerimisriba_raam.bind('<Configure>', lambda e: kanvas.configure(scrollregion=kanvas.bbox('all'))) # mis siin toimub
 
@@ -132,44 +133,44 @@ def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata
         if mida_näidata == 'shotid':
             i=0
             for rida in read:
-                rea_raam = Frame(kerimisriba_raam)
+                rea_raam = Frame(kerimisriba_raam, bg="#F7B8F5")
                 rea_raam.pack(fill=X, padx=5, pady=5)
                 lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed[i]))
 
-                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
+                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12), bg="#F7B8F5")
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)
                 i+=1
 
         elif mida_näidata == 'kokteilid':
             for i, rida in enumerate(read):
-                rea_raam = Frame(kerimisriba_raam)
+                rea_raam = Frame(kerimisriba_raam, bg="#F7B8F5")
                 rea_raam.pack(fill=X, padx=5, pady=5)
                 lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed[i][0]))
                 lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed[i][1]))
-                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
+                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12), bg="#F7B8F5")
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)
 
         elif mida_näidata == 'mõlemad':
             i=0
             shottide_arv = len(sobivate_jookide_nimed['shotid'])
             for rida in read[:shottide_arv+1]: # arvestab shotte
-                rea_raam = Frame(kerimisriba_raam)
+                rea_raam = Frame(kerimisriba_raam, bg="#F7B8F5")
                 rea_raam.pack(fill=X, padx=5, pady=5)
                 if not '---' in rida and rida != '': # tähendab, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['shotid'][i]))
                     i+=1
-                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
+                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12), bg="#F7B8F5")
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)
 
             i=0
             for rida in read[shottide_arv+1:]: # arvestab kokteile
-                rea_raam = Frame(kerimisriba_raam)
+                rea_raam = Frame(kerimisriba_raam, bg="#F7B8F5")
                 rea_raam.pack(fill=X, padx=5, pady=5)
                 if not '---' in rida and rida != '': # tähendab, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['kokteilid'][i][0]))
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['kokteilid'][i][1]))
                     i+=1
-                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12))
+                teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12), bg="#F7B8F5")
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)         
     else:
         Label(kerimisriba_raam, text='Ühtegi tulemust selle eelarvega ei leitud.')
@@ -179,7 +180,8 @@ def kuva_sõnum(sõnum, juuraken):
     aken = Toplevel(juuraken)
     aken.title('Teade')
     aken.geometry('300x120')
-    Label(aken, text=sõnum, wraplength=280).pack(padx=10, pady=10)
+    aken.configure(bg="#F7B8F5")
+    Label(aken, text=sõnum, wraplength=280, bg="#F7B8F5").pack(padx=10, pady=10)
     Button(aken, text='OK', command=aken.destroy).pack(pady=6)
     aken.update()
     return aken # nii on võimalik akent hiljem sulgeda, kontrollides, kas see on None või mitte
@@ -246,7 +248,6 @@ def näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko
     sobivate_kokteilide_nimed = list(kokteilid.keys())
 
     read = []
-    read.append(f'--- Shotid eelarvega {vormistatud_eelarve} € ---')
     read += [f'{nimi} — {round(hind,2)} €' for nimi, hind in shotid.items()]
     read.append('')
     read.append(f'--- Kokteilid eelarvega {vormistatud_eelarve} € ---')
@@ -297,30 +298,31 @@ def main():
     #----------graafilise liidese kood-------------
 
     juuraken = Tk()
+    juuraken.configure(bg="#F7B8F5") #roosa taust
     juuraken.title('Kokteiliraamat')
     juuraken.geometry('600x300')
-    juurakna_pealdis = Label(juuraken, text='Sisesta oma eelarve (€):')
+    juurakna_pealdis = Label(juuraken, text='Sisesta oma eelarve (€):', font=("Arial", 15, "bold"), bg="#F7B8F5", fg="#F61EEF" )
     juurakna_pealdis.pack(pady=10)
     kasutaja_eelarve = Entry(juuraken)
     kasutaja_eelarve.pack(pady=5)
 
-    pealeht = Frame(juuraken)
+    pealeht = Frame(juuraken, bg="#F7B8F5")
     pealeht.pack(pady=10)
 
     hinnavalikud = {'Kraabi hinnad veebist' : 'y', 'Võta hinnad failist' : 'n'}
     vali_kust_hinnad = StringVar(value='n')
     i = 0
     for nupu_tekst, väärtus in hinnavalikud.items():
-        Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus).grid(sticky='w', row = i, column = 1, padx=5, pady=5)
+        Radiobutton(pealeht, text=nupu_tekst, variable=vali_kust_hinnad, value=väärtus, bg="#F7B8F5", font=("Arial", 11)).grid(sticky='w', row = i, column = 1, padx=5, pady=5)
         i+=1
 
-    kokteili_nupp = Button(pealeht, text='Teen kokteile', command=lambda: näita_kokteile(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, sobivused, juuraken))
+    kokteili_nupp = Button(pealeht, text='Teen kokteile', bg="#F56DF0", fg="white", font=("Arial", 11, "bold"), command=lambda: näita_kokteile(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, sobivused, juuraken))
     kokteili_nupp.grid(row=2, column=0, padx=5, pady=5)
     
-    shoti_nupp = Button(pealeht, text='Teen shotte', command=lambda: näita_shotte(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, juuraken))
+    shoti_nupp = Button(pealeht, text='Teen shotte',bg="#F56DF0", fg="white", font=("Arial", 11, "bold") , command=lambda: näita_shotte(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, juuraken))
     shoti_nupp.grid(row=2, column=1, padx=5, pady=5)
     
-    mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat', command=lambda: näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, sobivused, juuraken))
+    mõlema_valiku_nupp = Button(pealeht, text='Teen mõlemat',bg="#F56DF0", fg="white", font=("Arial", 11, "bold") , command=lambda: näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, sobivused, juuraken))
     mõlema_valiku_nupp.grid(row=2, column=2, padx=5, pady=5)
 
     juuraken.mainloop()
