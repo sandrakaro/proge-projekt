@@ -243,7 +243,7 @@ def näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko
     kokteilid = leia_sobivad_kokteilid(eelarve, alko_sõnastik, pealeka_sõnastik, sobivused)
 
     sobivate_shottide_nimed = list(shotid.keys())
-    sobivate_kokteilide_nimed = [[alko, pealeka] for (alko, pealeka) in kokteilid]
+    sobivate_kokteilide_nimed = list(kokteilid.keys())
 
     read = []
     read.append(f'--- Shotid eelarvega {vormistatud_eelarve} € ---')
