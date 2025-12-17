@@ -7,7 +7,3 @@ Joogid on üldiselt standardiseeritud – alkoholipudel on 500 ml ning pealekapa
 Programmi kasutamiseks tuleb installida teegid bs4, selenium ja pillow. Lisaks on vajalik Chrome brauser, kuid soovi korral võib asendada funktsioonid muu brauseri omadega.
 
 Vajalikud juhendid koodi modifitseerimiseks ja muud täpsustused leiad wikist.
-
-Notioni fail  
-
-https://www.notion.so/Proge-projekti-beetaversiooni-t-htaeg-299f7fe65d1a80229203c1da9e7db991?source=copy_link
