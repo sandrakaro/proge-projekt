@@ -1,4 +1,4 @@
-# ---Projekti pealkiri: kokteiliraamat??????????????
+# ---Projekti pealkiri: "Kokteiliraamat"
 # ---Teema: kasutaja sisestab sobiva summa ning saab reaalajas Prisma hinnainfo kokteilide
 # või shottide kohta, mida saab selle raha eest teha
 # ---Autorid: Greteliis Kokk, Sandra Karo
