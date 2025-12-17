@@ -156,7 +156,7 @@ def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata
             for rida in read[:shottide_arv+1]: # arvestab shotte
                 rea_raam = Frame(kerimisriba_raam, bg="#F7B8F5")
                 rea_raam.pack(fill=X, padx=5, pady=5)
-                if not '---' in rida and rida != '': # tähendab, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
+                if not '---' in rida and rida != '': # tähendaks, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['shotid'][i]))
                     i+=1
                 teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12), bg="#F7B8F5")
@@ -166,14 +166,14 @@ def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata
             for rida in read[shottide_arv+1:]: # arvestab kokteile
                 rea_raam = Frame(kerimisriba_raam, bg="#F7B8F5")
                 rea_raam.pack(fill=X, padx=5, pady=5)
-                if not '---' in rida and rida != '': # tähendab, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
+                if not '---' in rida and rida != '': # tähendaks, et tegu on vahepealkirjaga / tühja reaga, kuhu pole pilti vaja
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['kokteilid'][i][0]))
                     lisa_pilt(rea_raam, leia_pildi_tee(sobivate_jookide_nimed['kokteilid'][i][1]))
                     i+=1
                 teksti_väli = Label(rea_raam, text=rida, font=('Arial', 12), bg="#F7B8F5")
                 teksti_väli.pack(side=LEFT, padx=10, expand=True)         
     else:
-        Label(kerimisriba_raam, text='Ühtegi tulemust selle eelarvega ei leitud.')
+        Label(kerimisriba_raam, text='Ühtegi tulemust selle eelarvega ei leitud.') # see millegipärast ei tööta
 
 
 def kuva_sõnum(sõnum, juuraken):
@@ -207,8 +207,10 @@ def näita_kokteile(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nim
         read.append(f'{alko_nimi} + {pealeka_nimi} = {round(koguhind,2)} €')
         sobivate_kokteilide_nimed.append([alko_nimi, pealeka_nimi])
     
-    näita_tulemuste_akent(f'Sobivad kokteilid eelarvega {vormistatud_eelarve} €', read, sobivate_kokteilide_nimed, 'kokteilid', juuraken)
-
+    if sobivad_kokteilid:
+        näita_tulemuste_akent(f'Sobivad kokteilid eelarvega {vormistatud_eelarve} €', read, sobivate_kokteilide_nimed, 'kokteilid', juuraken)
+    else:
+        kuva_sõnum('Sellise eelarvega kokteile ei leitud.', juuraken)
 
 def näita_shotte(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, juuraken):
     alko_sõnastik, pealeka_sõnastik = leia_hinnad(vali_kust_hinnad.get(), joogisõnastik, alko_nimed, pealeka_nimed, juuraken)
@@ -225,9 +227,11 @@ def näita_shotte(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed
     sobivad_shotid = leia_sobivad_shotid(eelarve, alko_sõnastik)
     sobivate_shottide_nimed = [alko_nimi for alko_nimi in sobivad_shotid]
 
-    read = [f'{alko_nimi} — {round(hind,2)} €' for alko_nimi, hind in sobivad_shotid.items()]
-    näita_tulemuste_akent(f'Sobivad shotid eelarvega {vormistatud_eelarve} €', read, sobivate_shottide_nimed, 'shotid', juuraken)
-
+    if sobivad_shotid:
+        read = [f'{alko_nimi} — {round(hind,2)} €' for alko_nimi, hind in sobivad_shotid.items()]
+        näita_tulemuste_akent(f'Sobivad shotid eelarvega {vormistatud_eelarve} €', read, sobivate_shottide_nimed, 'shotid', juuraken)
+    else:
+        kuva_sõnum('Sellise eelarvega shotte ei leitud', juuraken)
 
 def näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko_nimed, pealeka_nimed, sobivused, juuraken):
     alko_sõnastik, pealeka_sõnastik = leia_hinnad(vali_kust_hinnad.get(), joogisõnastik, alko_nimed, pealeka_nimed, juuraken)
@@ -248,12 +252,16 @@ def näita_kõiki_jooke(kasutaja_eelarve, vali_kust_hinnad, joogisõnastik, alko
     sobivate_kokteilide_nimed = list(kokteilid.keys())
 
     read = []
-    read += [f'{nimi} — {round(hind,2)} €' for nimi, hind in shotid.items()]
-    read.append('')
-    read.append(f'--- Kokteilid eelarvega {vormistatud_eelarve} € ---')
-    read += [f'{alko_nimi} + {pealeka_nimi} = {round(hind,2)} €' for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
+    if shotid or kokteilid:
+        read.append(f'--- Shotid eelarvega {vormistatud_eelarve} € ---')
+        read += [f'{nimi} — {round(hind,2)} €' for nimi, hind in shotid.items()]
+        read.append('')
+        read.append(f'--- Kokteilid eelarvega {vormistatud_eelarve} € ---')
+        read += [f'{alko_nimi} + {pealeka_nimi} = {round(hind,2)} €' for (alko_nimi, pealeka_nimi), hind in kokteilid.items()]
 
-    näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {vormistatud_eelarve} €', read, {'shotid': sobivate_shottide_nimed, 'kokteilid': sobivate_kokteilide_nimed}, 'mõlemad', juuraken)
+        näita_tulemuste_akent(f'Kõik sobivad joogid eelarvega {vormistatud_eelarve} €', read, {'shotid': sobivate_shottide_nimed, 'kokteilid': sobivate_kokteilide_nimed}, 'mõlemad', juuraken)
+    else:
+        kuva_sõnum('Sellise eelarvega jooke ei leitud.', juuraken)
 
 
 #----------peamine programmikood-------------
