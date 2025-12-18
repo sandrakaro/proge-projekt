@@ -109,7 +109,7 @@ def näita_tulemuste_akent(pealkiri, read, sobivate_jookide_nimed, mida_näidata
     tulemuste_aken = Toplevel(juuraken)
     tulemuste_aken.configure(bg="#F7B8F5")
     tulemuste_aken.title(pealkiri)
-    tulemuste_aken.geometry('450x350')
+    tulemuste_aken.geometry('700x500')
 
     pealdis = Label(tulemuste_aken, text=pealkiri,bg="#F7B8F5", font=('Arial', 12, 'bold'))
     pealdis.pack(pady=8)
